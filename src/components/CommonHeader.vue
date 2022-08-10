@@ -28,6 +28,7 @@
             <router-link
               class="nav-item nav-link fw-bold"
               :to="{ name: 'dashboard' }"
+              v-if="showUser.type == 0"
               >Users</router-link
             >
           </li>
@@ -57,7 +58,7 @@
                 <button @click="logOut" class="dropdown-item">Logout</button>
               </li>
               <li>
-                <router-link class="dropdown-item" :to="{ name: 'userprofile' }"
+                <router-link class="dropdown-item" :to="`/userprofile/${showUser.id}`"
                   >Profile</router-link
                 >
               </li>

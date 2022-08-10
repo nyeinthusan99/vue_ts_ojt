@@ -7,13 +7,18 @@
   <div class="row">
     <div class="col-md-10 mx-auto">
       <div class="d-inline">
-        <label class="form-label me-2 fs-5">Title:</label>
         <form class="form-inline d-inline me-4" @submit.prevent="postListsView">
           <input
-            class="form-control me-2 mt-2"
+            class="form-control me-2 mt-2 search"
             type="text"
-            placeholder="Search"
-            v-model="search"
+            placeholder="Title"
+            v-model="searchForm.title"
+          />
+          <input
+            class="form-control me-2 mt-2 search"
+            type="text"
+            placeholder="Description"
+            v-model="searchForm.description"
           />
           <button
             class="btn btn-dark"
@@ -22,6 +27,20 @@
             <i class="fas fa-search"></i>
           </button>
         </form>
+        <!-- <form class="form-inline d-inline me-4" @submit.prevent="postListsView2">
+          <input
+            class="form-control me-2 mt-2 search"
+            type="text"
+            placeholder="Description"
+            v-model="descSearch"
+          />
+          <button
+            class="btn btn-dark"
+            type="submit"
+          >
+            <i class="fas fa-search"></i>
+          </button>
+        </form> -->
       </div>
       <router-link class="btn btn-dark me-3 px-4" :to="{ name: 'createpost' }"
         ><i class="fas fa-plus"></i> &nbsp; Add</router-link
@@ -31,16 +50,16 @@
       >
       <a
         type="button"
-        :href="`http://127.0.0.1:8000/api/posts/export`"
-        v-if="showUser.type == 0"
+        :href="`http://127.0.0.1:8000/api/posts/export/${showUser.id}`"
       >
-        <button class="btn btn-dark">
+        <button class="btn btn-dark" >
           <i class="fas fa-download"></i> &nbsp; Download
         </button>
       </a>
-      <button class="btn btn-dark" v-else :disabled="showUser.type == 1">
+      <!-- <button class="btn btn-dark" v-else :disabled="showUser.type == 1">
         <i class="fas fa-download"></i> &nbsp; Download
-      </button>
+      </button> -->
+      <span class="ms-5 ">{{count}} of {{total}}</span>
       <table class="table table-bordered table-striped table-responsive mt-4">
         <thead>
           <tr>
@@ -119,6 +138,7 @@
         </td>
       </table>
       <Pagination :data="postLists" @pagination-change-page="postListsView" />
+    
     </div>
   </div>
 </template>
@@ -137,10 +157,16 @@ export default defineComponent({
     return {
       postLists: Object,
       data:Array,
-      search: "",
       error: "",
-      deleteId:""
+      deleteId:"",
+      total:'',
+      count:'',
+      searchForm:{
+      title: "",
+      description:"",
+    }
     };
+   
   },
   mounted() {
     this.postListsView();
@@ -151,15 +177,29 @@ export default defineComponent({
   methods: {
    async postListsView(page = 1) {
     await  apiServices
-        .postList(page, this.search)
+        .postList(page, this.searchForm)
         .then((response) => {
           this.postLists = response.data;
-          this.data = response.data.data
+          this.data = response.data.data;
+          this.total = response.data.total;
+          this.count = response.data.to
+          console.log(response.data)
         })
         .catch((error) => {
           this.error = error.response.data.Result;
         });
     },
+  // async postListsView2(page = 1) {
+  //   await  apiServices
+  //       .postList2(page, this.descSearch)
+  //       .then((response) => {
+  //         this.postLists = response.data;
+  //         this.data = response.data.data
+  //       })
+  //       .catch((error) => {
+  //         this.error = error.response.data.Result;
+  //       });
+  //   },
     confirmDelete(id:any){
       this.deleteId = id
     },
@@ -176,7 +216,8 @@ export default defineComponent({
 
 <style scoped>
 .form-control {
-  width: 25% !important;
+  width: 15% !important;
   display: inline-block;
 }
 </style>
+

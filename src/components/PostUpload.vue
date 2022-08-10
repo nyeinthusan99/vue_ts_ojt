@@ -36,6 +36,7 @@
 
 <script lang="ls">
 import {defineComponent} from 'vue';
+import { mapGetters, mapActions } from "vuex";
 import apiServices from "@/apiServices";
 export default defineComponent({
   name:'UserUpload',
@@ -43,8 +44,9 @@ export default defineComponent({
     return {
       file:'',
       error:'',
-      errs:[]
-    }
+      errs:[],
+       user_id:''
+  }
   },
   methods:{
     //to upload image
@@ -57,8 +59,9 @@ export default defineComponent({
       let formData = new FormData();
       formData.append("file",this.file);
 
-      apiServices.postUpload(formData)
+      apiServices.postUpload(formData,this.user_id)
       .then(response =>{
+        console.log()
         this.$router.push("/posts");
       })
       .catch(error =>{
@@ -69,8 +72,16 @@ export default defineComponent({
         }
         
       })
-     }
-  }
+     },
+  },
+  mounted() {
+    apiServices.getUser().then((response) => {
+      this.user_id = response.data.user.id;
+    });
+  },
+  //  computed: {
+  //   ...mapGetters(["showUser"]),
+  // },
 
 })
 </script>

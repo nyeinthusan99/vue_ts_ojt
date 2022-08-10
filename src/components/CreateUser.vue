@@ -46,6 +46,7 @@
               type="date"
               class="form-control"
               name="birthday"
+              :max="new Date().toISOString().substr(0, 10)"
               v-model="createData.dob"
             />
           </div>
@@ -53,8 +54,8 @@
             <label for="" class="form-label">Type</label>
             <select class="form-control" v-model="createData.type" id="">
               <option value="" selected disabled>--- Select one ---</option>
-              <option>0</option>
-              <option>1</option>
+              <option value="0">Admin</option>
+              <option value="1">User</option>
             </select>
             <p v-if="errors.type" class="text-danger">{{ errors.type[0] }}</p>
           </div>
@@ -73,6 +74,7 @@
               class="form-control-file"
               @change="profileUpload"
             />
+            <img :src="previewImage" alt="" class="w-100 mt-3">
           </div>
           <div class="mt-3 text-end">
             <button
@@ -102,6 +104,7 @@ export default defineComponent({
   name: "CreateUser",
   data() {
     return {
+      previewImage:null as unknown as File,
       image: null as unknown as File,
       createData: {
         name: "",
@@ -111,6 +114,7 @@ export default defineComponent({
         dob: "",
         address: "",
         type: "",
+        image:""
       },
       errors: {
         name: "",
@@ -124,6 +128,11 @@ export default defineComponent({
   methods: {
     profileUpload(event: any) {
       this.image = event.target.files[0];
+      let fileReader = new FileReader();
+      fileReader.onload = (e:any)=>{
+        this.previewImage = e.target.result
+      }
+      fileReader.readAsDataURL(this.image)
     },
     onSubmit() {
       var data = new FormData();
@@ -131,14 +140,15 @@ export default defineComponent({
       data.append("email", this.createData.email);
       data.append("password", this.createData.password);
       data.append("phone", this.createData.phone);
+       
       data.append("dob", this.createData.dob);
+     
       if(this.createData.address){
          data.append("address", this.createData.address);
       }else{
         data.append("address",'')
       }
-     
-      data.append("type", this.createData.type);
+       data.append("type", this.createData.type);
       data.append("image", this.image);
       
       apiServices

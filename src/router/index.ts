@@ -6,6 +6,7 @@ import SignUpView from '../views/SignUpView.vue'
 import CreateUserView from '../views/CreateUserView.vue'
 import UpdateUserView from '../views/UpdateUserView.vue'
 import UserProfileView from '../views/UserProfileView.vue'
+import UserDetailView from '../views/UserDetailView.vue'
 import UserUploadView from '../views/UserUploadView.vue'
 import PostUploadView from '../views/PostUploadView.vue'
 import PostListsView from '../views/PostListsView.vue'
@@ -39,9 +40,14 @@ const routes: Array<RouteRecordRaw> = [
     component: UpdateUserView
   },
   {
-    path: '/userprofile',
+    path: '/userprofile/:id',
     name: 'userprofile',
     component: UserProfileView
+  },
+  {
+    path: '/userdetail/:id',
+    name: 'userdetail',
+    component: UserDetailView
   },
   {
     path: '/userupload',
@@ -78,14 +84,16 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-  if (to.name === 'createuser' || to.name === 'userupload' ) {
+  if (to.name === 'createuser' || to.name === 'userupload' || to.name === 'updateuser' ||  to.name === 'dashboard' ||  to.name === 'userdetail') {
     let userType:any = localStorage.getItem('type');
-    if (userType==0) {next()}
-    else {next({ name: 'dashboard' })}
+    if (userType== 0) {next()}
+    else {next({ name: 'posts' })}
   }
   else {
     next();
  }
 })
+
+
 
 export default router

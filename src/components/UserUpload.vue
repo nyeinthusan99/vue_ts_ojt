@@ -39,6 +39,7 @@
 
 <script lang="ls">
 import {defineComponent} from 'vue';
+
 import apiServices from "@/apiServices";
 export default defineComponent({
   name:'UserUpload',
@@ -46,7 +47,8 @@ export default defineComponent({
     return {
       file:'',
       error:'',
-      errs:[]
+      errs:[],
+     
     }
   },
   methods:{
@@ -68,8 +70,9 @@ export default defineComponent({
           this.errs=error.response.data.errors
         }
       })
-     }
-  }
+     },
+  },
+    
 
 })
 </script>

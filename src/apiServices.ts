@@ -23,17 +23,21 @@ class apiServices{
         return axios.post('posts',category)
     }
 
-    async postList(page:any,search:any):Promise<any>{
-        return await axios.get(`posts?page=${page}&search=${search}`)
+    async postList(page:any,formData:any):Promise<any>{
+        return await axios.get(`posts?page=${page}&title=${formData.title}&description=${formData.description}`)
     }
+
+    // async postList2(page:any,search:any):Promise<any>{
+    //     return await axios.get(`descSearch?page=${page}&search=${search}`)
+    // }
 
     deletePost(id:any):Promise<any>{
         return  axios.delete(`posts/${id}`)
         
     }
 
-    postUpload(formData:any):Promise<any>{
-        return  axios.post('posts/import',formData)
+    postUpload(formData:any,id:any):Promise<any>{
+        return  axios.post('posts/import',formData,id)
     }
 
     updateGetPost(id:any):Promise<any>{
@@ -57,6 +61,13 @@ class apiServices{
     userList(page:any,search:any):Promise<any>{
         return  axios.get(`userLists?page=${page}&search=${search}`)
     }
+    userListEmail(page:any,search:any):Promise<any>{
+        return  axios.get(`emailSearch?page=${page}&search=${search}`)
+    }
+    userListType(page:any,search:any):Promise<any>{
+        return  axios.get(`typeSearch?page=${page}&search=${search}`)
+    }
+    
 
     deleteUser(id:any):Promise<any>{
         return  axios.delete(`users/${id}`)
@@ -65,6 +76,15 @@ class apiServices{
     userUpload(formData:any):Promise<any>{
         return  axios.post('users/import',formData)
     }
+
+    userDetail(id:any): Promise<any>{
+        return axios.get(`users/${id}`)
+    }
+
+    // downloadExcel():Promise<any>{
+    //     return axios.get(`posts/export`,{
+    //         responseType: "blob"})
+    // }
 
 }
 

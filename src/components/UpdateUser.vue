@@ -37,16 +37,17 @@
               type="date"
               class="form-control"
               name="birthday"
+               :max="new Date().toISOString().substr(0, 10)"
               v-model="createData.dob"
             />
             <p v-if="errors.dob" class="text-danger">{{ errors.dob[0] }}</p>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="" class="form-label">Type</label>
-            <select class="form-control" v-model="createData.type" id="">
-              <option value="" selected disabled>--- Select one ---</option>
-              <option>0</option>
-              <option>1</option>
+            <label for="" class="form-label d-block">Type</label>
+            <select class="form-control dropdown" v-model="createData.type" >
+              <option value="" disabled>--- Select one ---</option>
+              <option value="0">Admin</option>
+              <option value="1">User</option>
             </select>
             <p v-if="errors.type" class="text-danger">{{ errors.type[0] }}</p>
           </div>
@@ -70,7 +71,7 @@
               @change="profileUpload"
             />
             <img
-              :src="'http://localhost:8000/' + createData.image"
+              :src="previewImage ? previewImage : 'http://localhost:8000/' + createData.image  "
               alt=""
             />
             <p v-if="errors.image" class="text-danger">{{ errors.image[0] }}</p>
@@ -101,10 +102,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import apiServices from "@/apiServices";
+ import moment from 'moment';
 export default defineComponent({
   name: "UpdateUser",
   data() {
     return {
+      dateformat:'',
+       previewImage:null as unknown as File,
       image: null as unknown as File,
       testdob: "",
       createData: {
@@ -130,11 +134,22 @@ export default defineComponent({
   mounted() {
     apiServices.updateGetUser(this.$route.params.id).then((response) => {
       this.createData = response.data.data;
-    });
+      console.log(this.createData.type)
+      if(this.createData.dob){
+        this.createData.dob = moment(this.createData.dob).format('YYYY-MM-DD');
+      }else{
+        this.createData.dob=""
+      }
+      });
   },
   methods: {
     profileUpload(event: any) {
       this.image = event.target.files[0];
+      let fileReader = new FileReader();
+      fileReader.onload = (e:any)=>{
+        this.previewImage = e.target.result
+      }
+      fileReader.readAsDataURL(this.image)
     },
     onSubmit() {
       var data = new FormData();
@@ -151,6 +166,7 @@ export default defineComponent({
       }else{
         data.append("address",'')
       }
+      
       data.append("type", this.createData.type);
       data.append("image", this.image);
 

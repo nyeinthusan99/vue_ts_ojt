@@ -44,6 +44,7 @@
             type="date"
             class="form-control"
             name="birthday"
+             :max="new Date().toISOString().substr(0, 10)"
             v-model="registerData.dob"
           />
           <p v-if="errors.dob" class="text-danger">{{ errors.dob[0] }}</p>
@@ -64,14 +65,10 @@
           <label for="" class="form-label d-block">Profile</label>
           <input
             type="file"
-            :src="
-              image == null
-                ? 'http://localhost:8000/' + registerData.image
-                : image
-            "
             class="form-control-file"
             @change="profileUpload"
           />
+           <img :src="previewImage" alt="" class="w-100 mt-3">
           <p v-if="errors.image" class="text-danger">{{ errors.image[0] }}</p>
         </div>
         <div class="mt-3 mb-3 text-end">
@@ -105,6 +102,7 @@ export default defineComponent({
   name: "SignUp",
   data() {
     return {
+      previewImage:null as unknown as File,
       image: null as unknown as File,
       registerData: {
         name: "",
@@ -130,11 +128,14 @@ export default defineComponent({
   methods: {
     //to upload image
     profileUpload(event: any) {
-      const target = event.target as HTMLInputElement;
-      if (target != null && target.files != null) {
         this.image = event.target.files[0];
+        let fileReader = new FileReader();
+      fileReader.onload = (e:any)=>{
+        this.previewImage = e.target.result
       }
+      fileReader.readAsDataURL(this.image)
     },
+   
 
     //to submit register data
     onSubmit() {

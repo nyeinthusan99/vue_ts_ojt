@@ -7,28 +7,61 @@
 
   <div class="row">
     <div class="col-md-10 mx-auto">
-      <div class="d-inline">
-        <label class="form-label me-2 fs-5">Name:</label>
+      <div class="">
         <form class="form-inline d-inline me-4" @submit.prevent="userListsView">
           <input
             class="form-control me-2 mt-2"
             type="text"
-            placeholder="Search"
+            placeholder="Name"
+            v-model="search"
+          />
+           <input
+            class="form-control me-2 mt-2"
+            type="text"
+            placeholder="Email"
+            v-model="search"
+          />
+           <input
+            class="form-control me-2 mt-2"
+            type="text"
+            placeholder="Type"
             v-model="search"
           />
           <button class="btn btn-dark" type="submit">
             <i class="fas fa-search"></i>
           </button>
         </form>
+        <!-- <form class="form-inline d-inline me-4" @submit.prevent="userListsEmail">
+          <input
+            class="form-control me-2 mt-2"
+            type="text"
+            placeholder="Email"
+            v-model="emailSearch"
+          />
+          <button class="btn btn-dark" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+          <form class="form-inline d-inline me-4" @submit.prevent="userListsSearch">
+          <select class="form-control me-2 mt-2" v-model="typeSearch" >
+              <option value="" selected disabled>Type</option>
+              <option value="0">Admin</option>
+              <option value="1">User</option>
+            </select>
+          <button class="btn btn-dark" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form> -->
       </div>
+    
       <router-link
-        class="btn btn-dark me-3 px-4"
+        class="btn btn-dark me-3 px-4 mt-3"
         :class="{ disabled: showUser.type == 1 }"
         :to="{ name: 'createuser' }"
         ><i class="fas fa-plus"></i> &nbsp; Add</router-link
       >
       <router-link
-        class="btn btn-dark me-3 px-4"
+        class="btn btn-dark me-3 px-4 mt-3"
         :class="{ disabled: showUser.type == 1 }"
         :to="{ name: 'userupload' }"
         ><i class="fas fa-upload"></i> &nbsp; Upload</router-link
@@ -38,13 +71,13 @@
         :href="`http://127.0.0.1:8000/api/users/export`"
         v-if="showUser.type == 0"
       >
-        <button class="btn btn-dark">
+        <button class="btn btn-dark mt-3">
           <i class="fas fa-download"></i> &nbsp; Download
         </button>
       </a>
-      <button class="btn btn-dark" v-else :disabled="showUser.type == 1">
+      <!-- <button class="btn btn-dark m" v-else :disabled="showUser.type == 1">
         <i class="fas fa-download"></i> &nbsp; Download
-      </button>
+      </button> -->
 
       <table class="table table-bordered table-striped table-responsive mt-4">
         <thead>
@@ -60,20 +93,21 @@
           </tr>
         </thead>
         <tbody v-if="data && data.length > 0">
-          <tr v-for="(user, index) in data" :key="index">
-            <td>
+          <tr v-for="(user, index) in data" :key="index" >
+            <td @click.prevent="userDetail(user.id)">
               <img
                 :src="user.image ? 'http://localhost:8000/' + user.image : img"
               />
             </td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td v-if="user.type == 1">User</td>
-            <td v-if="user.type == 0">Admin</td>
-            <td>{{ user.phone }}</td>
-            <td>{{ user.address }}</td>
-            <td>{{ user.dob }}</td>
-            <td class="text-center" v-if="showUser.type == 0">
+            <td @click.prevent="userDetail(user.id)">{{ user.name }}</td>
+            <td @click.prevent="userDetail(user.id)">{{ user.email }}</td>
+             <!-- <td @click.prevent="userDetail(user.id)">{{ user.type }}</td> -->
+            <td @click.prevent="userDetail(user.id)" v-if="user.type == 1">User</td>
+            <td @click.prevent="userDetail(user.id)" v-if="user.type == 0">Admin</td>
+            <td @click.prevent="userDetail(user.id)">{{ user.phone }}</td>
+            <td @click.prevent="userDetail(user.id)">{{ user.address }}</td>
+            <td @click.prevent="userDetail(user.id)">{{ user.dob }}</td>
+            <td class="text-center" >
               <router-link
                 :to="`/updateuser/${user.id}`"
                 class="btn btn-dark me-lg-3"
@@ -131,7 +165,7 @@
                 </div>
               </div>
             </td>
-            <td v-else-if="showUser.type == 1 && showUser.id == user.id">
+            <!-- <td v-else-if="showUser.type == 1 && showUser.id == user.id">
               <router-link
                 :to="`/updateuser/${user.id}`"
                 class="btn btn-dark me-3"
@@ -189,6 +223,7 @@
                 </div>
               </div>
             </td>
+            <td v-else></td> -->
           </tr>
         </tbody>
         <td v-else class="text-center fs-5" colspan="8">
@@ -213,6 +248,8 @@ export default defineComponent({
     return {
       img: require("../assets/default.png"),
       search: "",
+      emailSearch:"",
+      typeSearch:"",
       userLists: Object,
       data: Array,
       deleteId: "",
@@ -228,13 +265,27 @@ export default defineComponent({
   methods: {
     //show user list & search
     userListsView(page = 1) {
-      apiServices.userList(page, this.search).then((response) => {
+      apiServices.userList(page, this.search)
+      .then((response) => {
         this.userLists = response.data;
         this.data = response.data.data;
       });
     },
+    //  userListsEmail(page = 1) {
+    //   apiServices.userListEmail(page, this.emailSearch)
+    //   .then((response) => {
+    //     this.userLists = response.data;
+    //     this.data = response.data.data;
+    //   });
+    // },
+    //  userListsSearch(page = 1) {
+    //   apiServices.userListType(page, this.typeSearch)
+    //   .then((response) => {
+    //     this.userLists = response.data;
+    //     this.data = response.data.data;
+    //   });
+    // },
     ...mapActions(["getUser"]),
-
 
     // to confirm delete or not
     confirmDelete(id: any) {
@@ -248,13 +299,21 @@ export default defineComponent({
         location.reload();
       });
     },
+
+    userDetail(id:any){
+      this.$router.push(`/userdetail/${id}`)
+      //apiServices.userDetail(this.$route.params.id)
+      //.then((response)=>{
+      //  
+      //})
+    }
   },
 });
 </script>
 
 <style scoped>
 .form-control {
-  width: 25% !important;
+  width: 15% !important;
   display: inline-block;
 }
 .disabled {

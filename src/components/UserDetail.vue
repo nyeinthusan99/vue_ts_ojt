@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="text-center">
           <img
-            :src="'http://localhost:8000/' + showUser.image"
+            :src="userDetail.image ? 'http://localhost:8000/' + userDetail.image : img"
             alt="profile image"
             class="mb-5 w-25 h-25"
           />
@@ -13,49 +13,41 @@
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-4"><label for="">Name</label></div>
             <div class="col-6">
-              <p class="">{{ showUser.name }}</p>
+              <p class="">{{userDetail.name}}</p>
             </div>
           </div>
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-4"><label for="">Email</label></div>
             <div class="col-6">
-              <p class="">{{ showUser.email }}</p>
+              <p class="">{{userDetail.email}}</p>
             </div>
           </div>
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-4"><label for="">Type</label></div>
             <div class="col-6">
-              <p class="">{{ showUser.type }}</p>
+              <p class="">{{userDetail.type}}</p>
             </div>
           </div>
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-4"><label for="">Phone</label></div>
             <div class="col-6">
-              <p class="">{{ showUser.phone }}</p>
+              <p class="">{{userDetail.phone}}</p>
             </div>
           </div>
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-4"><label for="">Date Of Birth</label></div>
             <div class="col-6">
-              <p v-if="showUser.dob">{{ showUser.dob }}</p>
+              <p v-if="userDetail.dob">{{userDetail.dob}}</p>
                <p v-else>-</p>
             </div>
           </div>
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-4"><label for="">Address</label></div>
             <div class="col-6">
-              <p v-if="showUser.address">{{ showUser.address }}</p>
+              <p v-if="userDetail.address">{{userDetail.address}}</p>
               <p v-else>-</p>
             </div>
           </div>
-        
-        </div>
-        <div class="text-end">
-          <router-link
-        class="btn btn-dark me-3 px-4 mt-3 "
-        :to="`/updateuser/${showUser.id}`"
-        >Update</router-link
-      >
         </div>
       </div>
     </div>
@@ -64,9 +56,28 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import apiServices from "@/apiServices";
 export default defineComponent({
-  computed: mapGetters(["showUser"]),
+  data(){
+    return{
+      img: require("../assets/default.png"),
+      userDetail:{
+        name:'',
+        email:'',
+        type:'',
+        phone:'',
+        address:'',
+        dob:'',
+        image:''
+      }
+    }
+  },
+  mounted(){
+    apiServices.userDetail(this.$route.params.id)
+    .then((response)=>{
+      this.userDetail=response.data.data
+    })
+  }
 });
 </script>
 
