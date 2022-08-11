@@ -61,7 +61,6 @@ export default defineComponent({
 
       apiServices.postUpload(formData,this.user_id)
       .then(response =>{
-        console.log()
         this.$router.push("/posts");
       })
       .catch(error =>{
@@ -79,10 +78,6 @@ export default defineComponent({
       this.user_id = response.data.user.id;
     });
   },
-  //  computed: {
-  //   ...mapGetters(["showUser"]),
-  // },
-
 })
 </script>
 

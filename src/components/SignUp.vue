@@ -44,7 +44,7 @@
             type="date"
             class="form-control"
             name="birthday"
-             :max="new Date().toISOString().substr(0, 10)"
+            :max="new Date().toISOString().substr(0, 10)"
             v-model="registerData.dob"
           />
           <p v-if="errors.dob" class="text-danger">{{ errors.dob[0] }}</p>
@@ -68,24 +68,17 @@
             class="form-control-file"
             @change="profileUpload"
           />
-           <img :src="previewImage" alt="" class="w-100 mt-3">
+          <img :src="previewImage" alt="" class="w-100 mt-3" />
           <p v-if="errors.image" class="text-danger">{{ errors.image[0] }}</p>
         </div>
         <div class="mt-3 mb-3 text-end">
-          <button
-            type="submit"
-            class="btn btn-dark  text-uppercase me-3 px-3"
-          >
+          <button type="submit" class="btn btn-dark text-uppercase me-3 px-3">
             Register
           </button>
-       
+
           <router-link
             :to="{ name: 'login' }"
-            class="
-              btn btn-outline-dark 
-              text-uppercase
-              px-3
-            "
+            class="btn btn-outline-dark text-uppercase px-3"
           >
             log in
           </router-link>
@@ -102,7 +95,7 @@ export default defineComponent({
   name: "SignUp",
   data() {
     return {
-      previewImage:null as unknown as File,
+      previewImage: null as unknown as File,
       image: null as unknown as File,
       registerData: {
         name: "",
@@ -128,14 +121,13 @@ export default defineComponent({
   methods: {
     //to upload image
     profileUpload(event: any) {
-        this.image = event.target.files[0];
-        let fileReader = new FileReader();
-      fileReader.onload = (e:any)=>{
-        this.previewImage = e.target.result
-      }
-      fileReader.readAsDataURL(this.image)
+      this.image = event.target.files[0];
+      let fileReader = new FileReader();
+      fileReader.onload = (e: any) => {
+        this.previewImage = e.target.result;
+      };
+      fileReader.readAsDataURL(this.image);
     },
-   
 
     //to submit register data
     onSubmit() {
@@ -145,10 +137,10 @@ export default defineComponent({
       data.append("password", this.registerData.password);
       data.append("phone", this.registerData.phone);
       data.append("dob", this.registerData.dob);
-      if(this.registerData.address){
-         data.append("address", this.registerData.address);
-      }else{
-        data.append("address",'')
+      if (this.registerData.address) {
+        data.append("address", this.registerData.address);
+      } else {
+        data.append("address", "");
       }
       data.append("type", this.registerData.type);
       data.append("image", this.image);

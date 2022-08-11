@@ -73,12 +73,10 @@ export default defineComponent({
       apiServices
         .postUpdate(this.$route.params.id, this.post)
         .then((response) => {
-          console.log(response.data);
           this.post = response.data.data;
           this.$router.push("/posts");
         })
         .catch((error) => {
-          console.log(error.response.data);
           this.errors = error.response.data.errors;
         });
     },
@@ -87,7 +85,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  textarea{
-    resize: none;
-  }
+textarea {
+  resize: none;
+}
 </style>

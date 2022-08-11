@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class=" col-md-3 mx-auto mt-5 pt-5 col-12">
+    <div class="col-md-3 mx-auto mt-5 pt-5 col-12">
       <h2 class="text-center">LOG IN</h2>
       <p
         v-if="authfail"
@@ -59,6 +59,7 @@ export default defineComponent({
   name: "LogIn",
   data() {
     return {
+      isLogin:false,
       authfail: "",
       loginData: {
         email: "",
@@ -75,11 +76,10 @@ export default defineComponent({
       apiServices
         .login(this.loginData)
         .then((response) => {
-          console.log(response.data);
           let token = response.data.token;
           localStorage.setItem("token", token);
           this.$router.push({ name: "posts" });
-          window.location.replace('posts')
+          window.location.replace("posts");
         })
         .catch((error) => {
           if (error.response.status == 401) {

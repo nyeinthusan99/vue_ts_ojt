@@ -13,47 +13,25 @@
             class="form-control me-2 mt-2"
             type="text"
             placeholder="Name"
-            v-model="search"
+            v-model="search.name"
           />
-           <input
-            class="form-control me-2 mt-2"
-            type="text"
-            placeholder="Email"
-            v-model="search"
-          />
-           <input
-            class="form-control me-2 mt-2"
-            type="text"
-            placeholder="Type"
-            v-model="search"
-          />
-          <button class="btn btn-dark" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </form>
-        <!-- <form class="form-inline d-inline me-4" @submit.prevent="userListsEmail">
           <input
             class="form-control me-2 mt-2"
             type="text"
             placeholder="Email"
-            v-model="emailSearch"
+            v-model="search.email"
           />
+          <select class="form-control me-2 mt-2" v-model="search.type">
+            <option value="" selected disabled>Type</option>
+            <option value="0">Admin</option>
+            <option value="1">User</option>
+          </select>
           <button class="btn btn-dark" type="submit">
             <i class="fas fa-search"></i>
           </button>
         </form>
-          <form class="form-inline d-inline me-4" @submit.prevent="userListsSearch">
-          <select class="form-control me-2 mt-2" v-model="typeSearch" >
-              <option value="" selected disabled>Type</option>
-              <option value="0">Admin</option>
-              <option value="1">User</option>
-            </select>
-          <button class="btn btn-dark" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </form> -->
       </div>
-    
+
       <router-link
         class="btn btn-dark me-3 px-4 mt-3"
         :class="{ disabled: showUser.type == 1 }"
@@ -75,9 +53,6 @@
           <i class="fas fa-download"></i> &nbsp; Download
         </button>
       </a>
-      <!-- <button class="btn btn-dark m" v-else :disabled="showUser.type == 1">
-        <i class="fas fa-download"></i> &nbsp; Download
-      </button> -->
 
       <table class="table table-bordered table-striped table-responsive mt-4">
         <thead>
@@ -93,7 +68,7 @@
           </tr>
         </thead>
         <tbody v-if="data && data.length > 0">
-          <tr v-for="(user, index) in data" :key="index" >
+          <tr v-for="(user, index) in data" :key="index">
             <td @click.prevent="userDetail(user.id)">
               <img
                 :src="user.image ? 'http://localhost:8000/' + user.image : img"
@@ -101,13 +76,16 @@
             </td>
             <td @click.prevent="userDetail(user.id)">{{ user.name }}</td>
             <td @click.prevent="userDetail(user.id)">{{ user.email }}</td>
-             <!-- <td @click.prevent="userDetail(user.id)">{{ user.type }}</td> -->
-            <td @click.prevent="userDetail(user.id)" v-if="user.type == 1">User</td>
-            <td @click.prevent="userDetail(user.id)" v-if="user.type == 0">Admin</td>
+            <td @click.prevent="userDetail(user.id)" v-if="user.type == 1">
+              User
+            </td>
+            <td @click.prevent="userDetail(user.id)" v-if="user.type == 0">
+              Admin
+            </td>
             <td @click.prevent="userDetail(user.id)">{{ user.phone }}</td>
             <td @click.prevent="userDetail(user.id)">{{ user.address }}</td>
             <td @click.prevent="userDetail(user.id)">{{ user.dob }}</td>
-            <td class="text-center" >
+            <td class="text-center">
               <router-link
                 :to="`/updateuser/${user.id}`"
                 class="btn btn-dark me-lg-3"
@@ -116,6 +94,7 @@
               </router-link>
 
               <button
+                v-if="showUser.id != user.id"
                 type="button"
                 class="btn btn-danger"
                 @click="confirmDelete(user.id)"
@@ -165,65 +144,6 @@
                 </div>
               </div>
             </td>
-            <!-- <td v-else-if="showUser.type == 1 && showUser.id == user.id">
-              <router-link
-                :to="`/updateuser/${user.id}`"
-                class="btn btn-dark me-3"
-              >
-                <i class="fas fa-pen"></i>
-              </router-link>
-
-              <button
-                type="button"
-                class="btn btn-danger"
-                @click="confirmDelete(user.id)"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-              >
-                <i class="fas fa-trash"></i>
-              </button>
-
-              <div
-                class="modal fade"
-                id="exampleModal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body fs-5 text-danger">
-                      Are you sure to delete?
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        @click="deleteUser()"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-            <td v-else></td> -->
           </tr>
         </tbody>
         <td v-else class="text-center fs-5" colspan="8">
@@ -247,9 +167,11 @@ export default defineComponent({
   data() {
     return {
       img: require("../assets/default.png"),
-      search: "",
-      emailSearch:"",
-      typeSearch:"",
+      search: {
+        name: "",
+        email: "",
+        type: "",
+      },
       userLists: Object,
       data: Array,
       deleteId: "",
@@ -265,26 +187,11 @@ export default defineComponent({
   methods: {
     //show user list & search
     userListsView(page = 1) {
-      apiServices.userList(page, this.search)
-      .then((response) => {
+      apiServices.userList(page, this.search).then((response) => {
         this.userLists = response.data;
         this.data = response.data.data;
       });
     },
-    //  userListsEmail(page = 1) {
-    //   apiServices.userListEmail(page, this.emailSearch)
-    //   .then((response) => {
-    //     this.userLists = response.data;
-    //     this.data = response.data.data;
-    //   });
-    // },
-    //  userListsSearch(page = 1) {
-    //   apiServices.userListType(page, this.typeSearch)
-    //   .then((response) => {
-    //     this.userLists = response.data;
-    //     this.data = response.data.data;
-    //   });
-    // },
     ...mapActions(["getUser"]),
 
     // to confirm delete or not
@@ -300,13 +207,9 @@ export default defineComponent({
       });
     },
 
-    userDetail(id:any){
-      this.$router.push(`/userdetail/${id}`)
-      //apiServices.userDetail(this.$route.params.id)
-      //.then((response)=>{
-      //  
-      //})
-    }
+    userDetail(id: any) {
+      this.$router.push(`/userdetail/${id}`);
+    },
   },
 });
 </script>

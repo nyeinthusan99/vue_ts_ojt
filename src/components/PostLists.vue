@@ -20,27 +20,10 @@
             placeholder="Description"
             v-model="searchForm.description"
           />
-          <button
-            class="btn btn-dark"
-            type="submit"
-          >
+          <button class="btn btn-dark" type="submit">
             <i class="fas fa-search"></i>
           </button>
         </form>
-        <!-- <form class="form-inline d-inline me-4" @submit.prevent="postListsView2">
-          <input
-            class="form-control me-2 mt-2 search"
-            type="text"
-            placeholder="Description"
-            v-model="descSearch"
-          />
-          <button
-            class="btn btn-dark"
-            type="submit"
-          >
-            <i class="fas fa-search"></i>
-          </button>
-        </form> -->
       </div>
       <router-link class="btn btn-dark me-3 px-4" :to="{ name: 'createpost' }"
         ><i class="fas fa-plus"></i> &nbsp; Add</router-link
@@ -52,14 +35,14 @@
         type="button"
         :href="`http://127.0.0.1:8000/api/posts/export/${showUser.id}`"
       >
-        <button class="btn btn-dark" >
+        <button class="btn btn-dark">
           <i class="fas fa-download"></i> &nbsp; Download
         </button>
       </a>
       <!-- <button class="btn btn-dark" v-else :disabled="showUser.type == 1">
         <i class="fas fa-download"></i> &nbsp; Download
       </button> -->
-      <span class="ms-5 ">{{count}} of {{total}}</span>
+      <span class="ms-5">{{ count }} of {{ total }}</span>
       <table class="table table-bordered table-striped table-responsive mt-4">
         <thead>
           <tr>
@@ -86,12 +69,13 @@
                 type="button"
                 class="btn btn-danger"
                 @click="confirmDelete(post.id)"
-                data-bs-toggle="modal" data-bs-target="#exampleModal"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
               >
                 <i class="fas fa-trash"></i>
               </button>
 
-               <div
+              <div
                 class="modal fade"
                 id="exampleModal"
                 tabindex="-1"
@@ -129,7 +113,7 @@
                     </div>
                   </div>
                 </div>
-              </div> 
+              </div>
             </td>
           </tr>
         </tbody>
@@ -138,7 +122,6 @@
         </td>
       </table>
       <Pagination :data="postLists" @pagination-change-page="postListsView" />
-    
     </div>
   </div>
 </template>
@@ -156,17 +139,16 @@ export default defineComponent({
   data() {
     return {
       postLists: Object,
-      data:Array,
+      data: Array,
       error: "",
-      deleteId:"",
-      total:'',
-      count:'',
-      searchForm:{
-      title: "",
-      description:"",
-    }
+      deleteId: "",
+      total: "",
+      count: "",
+      searchForm: {
+        title: "",
+        description: "",
+      },
     };
-   
   },
   mounted() {
     this.postListsView();
@@ -175,39 +157,28 @@ export default defineComponent({
     ...mapGetters(["showUser"]),
   },
   methods: {
-   async postListsView(page = 1) {
-    await  apiServices
+    async postListsView(page = 1) {
+      await apiServices
         .postList(page, this.searchForm)
         .then((response) => {
           this.postLists = response.data;
           this.data = response.data.data;
           this.total = response.data.total;
-          this.count = response.data.to
-          console.log(response.data)
+          this.count = response.data.to;
         })
         .catch((error) => {
           this.error = error.response.data.Result;
         });
     },
-  // async postListsView2(page = 1) {
-  //   await  apiServices
-  //       .postList2(page, this.descSearch)
-  //       .then((response) => {
-  //         this.postLists = response.data;
-  //         this.data = response.data.data
-  //       })
-  //       .catch((error) => {
-  //         this.error = error.response.data.Result;
-  //       });
-  //   },
-    confirmDelete(id:any){
-      this.deleteId = id
+
+    confirmDelete(id: any) {
+      this.deleteId = id;
     },
 
-   async deletePost() {
+    async deletePost() {
       await apiServices.deletePost(this.deleteId).then((res) => {
-       this.postListsView();
-        location.replace('/posts')
+        this.postListsView();
+        location.replace("/posts");
       });
     },
   },

@@ -27,9 +27,9 @@ class apiServices{
         return await axios.get(`posts?page=${page}&title=${formData.title}&description=${formData.description}`)
     }
 
-    // async postList2(page:any,search:any):Promise<any>{
-    //     return await axios.get(`descSearch?page=${page}&search=${search}`)
-    // }
+    userList(page:any,data:any):Promise<any>{
+        return  axios.get(`userLists?page=${page}&name=${data.name}&email=${data.email}&type=${data.type}`)
+    }
 
     deletePost(id:any):Promise<any>{
         return  axios.delete(`posts/${id}`)
@@ -57,18 +57,7 @@ class apiServices{
             headers: { 'Content-Type': 'multipart/form-data' }
         })
     }
-
-    userList(page:any,search:any):Promise<any>{
-        return  axios.get(`userLists?page=${page}&search=${search}`)
-    }
-    userListEmail(page:any,search:any):Promise<any>{
-        return  axios.get(`emailSearch?page=${page}&search=${search}`)
-    }
-    userListType(page:any,search:any):Promise<any>{
-        return  axios.get(`typeSearch?page=${page}&search=${search}`)
-    }
     
-
     deleteUser(id:any):Promise<any>{
         return  axios.delete(`users/${id}`)
     }
@@ -81,11 +70,9 @@ class apiServices{
         return axios.get(`users/${id}`)
     }
 
-    // downloadExcel():Promise<any>{
-    //     return axios.get(`posts/export`,{
-    //         responseType: "blob"})
-    // }
-
+    logout():Promise<any>{
+        return axios.post('logout')
+    }
 }
 
 export default new apiServices();

@@ -38,7 +38,7 @@
             <div class="col-4"><label for="">Date Of Birth</label></div>
             <div class="col-6">
               <p v-if="showUser.dob">{{ showUser.dob }}</p>
-               <p v-else>-</p>
+              <p v-else>-</p>
             </div>
           </div>
           <div class="row mb-2 d-flex justify-content-center">
@@ -48,14 +48,13 @@
               <p v-else>-</p>
             </div>
           </div>
-        
         </div>
         <div class="text-end">
           <router-link
-        class="btn btn-dark me-3 px-4 mt-3 "
-        :to="`/updateuser/${showUser.id}`"
-        >Update</router-link
-      >
+            class="btn btn-dark me-3 px-4 mt-3"
+            :to="`/updateuser/${showUser.id}`"
+            >Update</router-link
+          >
         </div>
       </div>
     </div>

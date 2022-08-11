@@ -37,14 +37,14 @@
               type="date"
               class="form-control"
               name="birthday"
-               :max="new Date().toISOString().substr(0, 10)"
+              :max="new Date().toISOString().substr(0, 10)"
               v-model="createData.dob"
             />
             <p v-if="errors.dob" class="text-danger">{{ errors.dob[0] }}</p>
           </div>
           <div class="col-md-6 mb-3">
             <label for="" class="form-label d-block">Type</label>
-            <select class="form-control dropdown" v-model="createData.type" >
+            <select class="form-control dropdown" v-model="createData.type">
               <option value="" disabled>--- Select one ---</option>
               <option value="0">Admin</option>
               <option value="1">User</option>
@@ -71,7 +71,11 @@
               @change="profileUpload"
             />
             <img
-              :src="previewImage ? previewImage : 'http://localhost:8000/' + createData.image  "
+              :src="
+                previewImage
+                  ? previewImage
+                  : 'http://localhost:8000/' + createData.image
+              "
               alt=""
             />
             <p v-if="errors.image" class="text-danger">{{ errors.image[0] }}</p>
@@ -102,13 +106,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import apiServices from "@/apiServices";
- import moment from 'moment';
+import moment from "moment";
 export default defineComponent({
   name: "UpdateUser",
   data() {
     return {
-      dateformat:'',
-       previewImage:null as unknown as File,
+      dateformat: "",
+      previewImage: null as unknown as File,
       image: null as unknown as File,
       testdob: "",
       createData: {
@@ -134,22 +138,21 @@ export default defineComponent({
   mounted() {
     apiServices.updateGetUser(this.$route.params.id).then((response) => {
       this.createData = response.data.data;
-      console.log(this.createData.type)
-      if(this.createData.dob){
-        this.createData.dob = moment(this.createData.dob).format('YYYY-MM-DD');
-      }else{
-        this.createData.dob=""
+      if (this.createData.dob) {
+        this.createData.dob = moment(this.createData.dob).format("YYYY-MM-DD");
+      } else {
+        this.createData.dob = "";
       }
-      });
+    });
   },
   methods: {
     profileUpload(event: any) {
       this.image = event.target.files[0];
       let fileReader = new FileReader();
-      fileReader.onload = (e:any)=>{
-        this.previewImage = e.target.result
-      }
-      fileReader.readAsDataURL(this.image)
+      fileReader.onload = (e: any) => {
+        this.previewImage = e.target.result;
+      };
+      fileReader.readAsDataURL(this.image);
     },
     onSubmit() {
       var data = new FormData();
@@ -161,12 +164,12 @@ export default defineComponent({
       } else {
         data.append("dob", "");
       }
-      if(this.createData.address){
-         data.append("address", this.createData.address);
-      }else{
-        data.append("address",'')
+      if (this.createData.address) {
+        data.append("address", this.createData.address);
+      } else {
+        data.append("address", "");
       }
-      
+
       data.append("type", this.createData.type);
       data.append("image", this.image);
 

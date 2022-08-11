@@ -16,63 +16,94 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: UserListsView
+    component: UserListsView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/',
     name: 'login',
-    component: LoginView
-    
+    component: LoginView,
+   
   },
   {
     path: '/signup',
     name: 'signup',
-    component: SignUpView
+    component: SignUpView,
+    
   },
   {
     path: '/createuser',
     name: 'createuser',
-    component: CreateUserView
+    component: CreateUserView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/updateuser/:id',
     name: 'updateuser',
-    component: UpdateUserView
+    component: UpdateUserView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/userprofile/:id',
     name: 'userprofile',
-    component: UserProfileView
+    component: UserProfileView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/userdetail/:id',
     name: 'userdetail',
-    component: UserDetailView
+    component: UserDetailView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/userupload',
     name: 'userupload',
-    component: UserUploadView
+    component: UserUploadView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/postupload',
     name: 'postupload',
-    component: PostUploadView
+    component: PostUploadView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/posts',
     name: 'posts',
-    component: PostListsView
+    component: PostListsView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/createpost',
     name: 'createpost',
-    component: CreatePostView
+    component: CreatePostView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/updatepost/:id',
     name: 'updatepost',
-    component: UpdatePostView
+    component: UpdatePostView,
+    meta: {
+      requiresAuth: true
+    }
   },
 ]
 
@@ -84,7 +115,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-  if (to.name === 'createuser' || to.name === 'userupload' || to.name === 'updateuser' ||  to.name === 'dashboard' ||  to.name === 'userdetail') {
+  if (to.name === 'createuser' || to.name === 'userupload'  ||  to.name === 'dashboard' ||  to.name === 'userdetail') {
     let userType:any = localStorage.getItem('type');
     if (userType== 0) {next()}
     else {next({ name: 'posts' })}
@@ -92,7 +123,36 @@ router.beforeEach((to, from, next) => {
   else {
     next();
  }
+
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    let token:any= localStorage.getItem('token');
+    if (!token) {
+      next({
+        name: "login"
+      })
+    } else {
+      next()
+    }
+   }
+  //else if (to.matched.some(record => record.meta.visitor)) {
+  //   let token:any= localStorage.getItem('token');
+  //   if (token) {
+  //     next({
+  //       name: "posts"
+  //     })
+  //   } else {
+  //     next()
+  //   }
+  // }
+  else {
+    next()
+  }
+})
+
+
 
 
 

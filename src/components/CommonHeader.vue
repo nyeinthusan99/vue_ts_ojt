@@ -4,7 +4,7 @@
       <h1>
         <router-link
           class="navbar-brand fs-3 text-dark homeNav fw-bold"
-          :to="{ name: 'dashboard' }"
+          :to="{ name: 'posts' }"
           >SCM</router-link
         >
       </h1>
@@ -55,10 +55,12 @@
               aria-labelledby="navbarDarkDropdownMenuLink"
             >
               <li>
-                <button @click="logOut" class="dropdown-item">Logout</button>
+                <button @click.prevent="logout" class="dropdown-item">Logout</button>
               </li>
               <li>
-                <router-link class="dropdown-item" :to="`/userprofile/${showUser.id}`"
+                <router-link
+                  class="dropdown-item"
+                  :to="`/userprofile/${showUser.id}`"
                   >Profile</router-link
                 >
               </li>
@@ -71,15 +73,19 @@
 </template>
 
 <script lang="ts">
+import apiServices from "@/apiServices";
 import { defineComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
 export default defineComponent({
   name: "CommonHeader",
   methods: {
     //lotout user
-    logOut() {
-      localStorage.clear();
-      this.$router.push("/");
+    logout() {
+      apiServices.logout()
+      .then((response) => {
+        localStorage.clear();
+        this.$router.push("/");
+      })
     },
     ...mapActions(["getUser"]),
   },
@@ -101,3 +107,4 @@ export default defineComponent({
   margin-right: 75px;
 }
 </style>
+
