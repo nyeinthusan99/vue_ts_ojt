@@ -25,7 +25,9 @@
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-4"><label for="">Type</label></div>
             <div class="col-6">
-              <p class="">{{ showUser.type }}</p>
+              <!-- <p class="">{{ showUser.type }}</p> -->
+              <p v-if="showUser.type == 1">User</p>
+              <p v-if="showUser.type == 0">Admin</p>
             </div>
           </div>
           <div class="row mb-2 d-flex justify-content-center">
