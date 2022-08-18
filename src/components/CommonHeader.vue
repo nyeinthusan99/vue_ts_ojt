@@ -64,6 +64,13 @@
                   >Profile</router-link
                 >
               </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="`/changepassword/${showUser.id}`"
+                  >Change Password</router-link
+                >
+              </li>
             </ul>
           </li>
         </ul>

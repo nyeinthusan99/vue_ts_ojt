@@ -12,6 +12,7 @@ import PostUploadView from '../views/PostUploadView.vue'
 import PostListsView from '../views/PostListsView.vue'
 import CreatePostView from '../views/CreatePostView.vue'
 import UpdatePostView from '../views/UpdatePostView.vue'
+import ChangePasswordView from '../views/ChangePasswordView.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
@@ -101,6 +102,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/updatepost/:id',
     name: 'updatepost',
     component: UpdatePostView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/changepassword/:id',
+    name: 'changepassword',
+    component: ChangePasswordView,
     meta: {
       requiresAuth: true
     }

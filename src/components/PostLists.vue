@@ -48,7 +48,7 @@
           <tr>
             <th scope="col">No</th>
             <th scope="col">Title</th>
-            <th scope="col">Description</th>
+            <th scope="col" >Description</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -56,7 +56,7 @@
           <tr v-for="(post, index) in data" :key="index">
             <th scope="row">{{ index + 1 }}</th>
             <td>{{ post.title }}</td>
-            <td>{{ post.description }}</td>
+            <td class="pre-line">{{ post.description }}</td>
             <td class="text-center">
               <router-link
                 :to="`/updatepost/${post.id}`"
@@ -189,6 +189,9 @@ export default defineComponent({
 .form-control {
   width: 15% !important;
   display: inline-block;
+}
+.pre-line{
+  white-space: pre-line;
 }
 </style>
 

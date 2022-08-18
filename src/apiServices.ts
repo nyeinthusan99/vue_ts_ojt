@@ -73,6 +73,10 @@ class apiServices{
     logout():Promise<any>{
         return axios.post('logout')
     }
+
+    changePassword(data:any):Promise<any>{
+        return axios.post('changepassword',data)
+    }
 }
 
 export default new apiServices();
