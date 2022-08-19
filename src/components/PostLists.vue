@@ -33,7 +33,7 @@
       >
       <a
         type="button"
-        :href="`http://127.0.0.1:8000/api/posts/export/${showUser.id}`"
+        @click.prevent ="download()"
       >
         <button class="btn btn-dark">
           <i class="fas fa-download"></i> &nbsp; Download
@@ -147,6 +147,7 @@ export default defineComponent({
       searchForm: {
         title: "",
         description: "",
+        type:localStorage.getItem("type")
       },
     };
   },
@@ -169,6 +170,21 @@ export default defineComponent({
         .catch((error) => {
           this.error = error.response.data.Result;
         });
+    },
+
+    download(page = 1){
+      apiServices.downloadPost(page, this.searchForm)
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const tag = document.createElement("a");
+        tag.href = url;
+        tag.setAttribute("download", "posts.xlsx");
+        document.body.appendChild(tag);
+        tag.click();
+      })
+      .catch((errors) => {
+        console.log(errors);
+      })
     },
 
     confirmDelete(id: any) {

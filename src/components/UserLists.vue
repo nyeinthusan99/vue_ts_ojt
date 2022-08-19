@@ -46,7 +46,7 @@
       >
       <a
         type="button"
-        :href="`http://127.0.0.1:8000/api/users/export`"
+        @click.prevent="download()"
         v-if="showUser.type == 0"
       >
         <button class="btn btn-dark mt-3">
@@ -191,6 +191,20 @@ export default defineComponent({
         this.userLists = response.data;
         this.data = response.data.data;
       });
+    },
+    download(page = 1){
+      apiServices.downloadUser(page, this.search)
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const tag = document.createElement("a");
+        tag.href = url;
+        tag.setAttribute("download", "users.xlsx");
+        document.body.appendChild(tag);
+        tag.click();
+      })
+      .catch((errors) => {
+        console.log(errors);
+      })
     },
     ...mapActions(["getUser"]),
 

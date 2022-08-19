@@ -44,16 +44,16 @@ class apiServices{
         return axios.get(`posts/${id}`)
     }
 
-    postUpdate(id:any,post:any):Promise<any>{
-        return axios.put(`posts/${id}`,post)
+    postUpdate(post:any):Promise<any>{
+        return axios.post(`updatePost`,post)
     }
 
     updateGetUser(id:any):Promise<any>{
         return axios.get(`users/${id}`)
     }
 
-    updateUser(id:any,data:any):Promise<any>{
-        return axios.post(`updateUser/${id}`,data, {
+    updateUser(data:any):Promise<any>{
+        return axios.post(`updateUser`,data, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
     }
@@ -76,6 +76,18 @@ class apiServices{
 
     changePassword(data:any):Promise<any>{
         return axios.post('changepassword',data)
+    }
+
+    downloadUser(page:any,data:any):Promise<any>{
+        return axios.get(`users/export?page=${page}&name=${data.name}&email=${data.email}&type=${data.type}`,{
+            responseType:"blob"
+        })
+    }
+
+    downloadPost(page:any,formData:any):Promise<any>{
+        return axios.get(`posts/export?page=${page}&title=${formData.title}&description=${formData.description}&type=${formData.type}`,{
+            responseType:"blob"
+        })
     }
 }
 

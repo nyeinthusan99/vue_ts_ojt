@@ -3,11 +3,11 @@
     <div class="card bg-light">
       <div class="card-body">
         <h3 class="card-title my-3 pb-2 d-flex justify-content-center">
-          Create Post
+          Password Change
         </h3>
         <form class="" @submit.prevent="onSubmit">
           <div class="mb-3">
-             <label for="" class="form-label">Password</label>
+             <label for="" class="form-label">Old Password</label>
             <input
               type="password"
               class="form-control"
@@ -16,9 +16,12 @@
             <p v-if="errors.oldPassword" class="text-danger">
               {{ errors.oldPassword[0] }}
             </p>
+            <p v-if="errMsg" class="text-danger">
+              {{ errMsg }}
+            </p>
           </div>
           <div class="mb-3">
-             <label for="" class="form-label">Password</label>
+             <label for="" class="form-label">New Password</label>
             <input
               type="password"
               class="form-control"
@@ -50,7 +53,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import apiServices from "@/apiServices";
-import { mapGetters, mapActions } from "vuex";
 export default defineComponent({
   name: "CreatePost",
   data() {
@@ -61,8 +63,9 @@ export default defineComponent({
       },
       errors: {
         oldPassword: "",
-        newPassword: "",
+        newPassword: "",  
       },
+      errMsg:""
     };
   },
   mounted() {
@@ -75,18 +78,19 @@ export default defineComponent({
       apiServices
         .changePassword(this.changePw)
         .then((response) => {
-          this.$router.push({ name: "dashboard" });
+          localStorage.clear();
+          this.$router.push({ name: "login" });
         })
         .catch((error) => {
-          this.errors = error.response.data.errors;
+          if (error.response.status == 400) {
+             this.errMsg =error.response.data.message;
+          } else {
+             this.errors = error.response.data.errors;
+          }
         });
     },
-    ...mapActions(["getUser"]),
   },
 
-  computed: {
-    ...mapGetters(["showUser"]),
-  },
 });
 </script>
 

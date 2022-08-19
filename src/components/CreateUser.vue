@@ -49,6 +49,7 @@
               :max="new Date().toISOString().substr(0, 10)"
               v-model="createData.dob"
             />
+            <p v-if="errors.dob" class="text-danger">{{ errors.dob[0] }}</p>
           </div>
           <div class="col-md-6 mb-3">
             <label for="" class="form-label">Type</label>
@@ -122,6 +123,7 @@ export default defineComponent({
         password: "",
         phone: "",
         type: "",
+        dob:""
       },
     };
   },
@@ -156,6 +158,7 @@ export default defineComponent({
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
+          console.log(this.errors)
         });
     },
   },
@@ -164,3 +167,4 @@ export default defineComponent({
 
 <style>
 </style>
+

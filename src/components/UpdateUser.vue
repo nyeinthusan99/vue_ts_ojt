@@ -123,6 +123,7 @@ export default defineComponent({
         address: "",
         type: "",
         image: "",
+        id:""
       },
       errors: {
         name: "",
@@ -172,9 +173,10 @@ export default defineComponent({
 
       data.append("type", this.createData.type);
       data.append("image", this.image);
+       data.append("id", this.createData.id);
 
       apiServices
-        .updateUser(this.$route.params.id, data)
+        .updateUser(data)
         .then((response) => {
           this.$router.push({ name: "dashboard" });
         })

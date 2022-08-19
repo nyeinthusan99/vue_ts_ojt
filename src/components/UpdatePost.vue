@@ -55,6 +55,7 @@ export default defineComponent({
         title: "",
         description: "",
         user_id: "",
+        id:""
       },
       errors: {
         title: "",
@@ -71,7 +72,7 @@ export default defineComponent({
   methods: {
     updatePost() {
       apiServices
-        .postUpdate(this.$route.params.id, this.post)
+        .postUpdate(this.post)
         .then((response) => {
           this.post = response.data.data;
           this.$router.push("/posts");
