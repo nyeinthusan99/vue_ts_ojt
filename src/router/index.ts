@@ -13,6 +13,8 @@ import PostListsView from '../views/PostListsView.vue'
 import CreatePostView from '../views/CreatePostView.vue'
 import UpdatePostView from '../views/UpdatePostView.vue'
 import ChangePasswordView from '../views/ChangePasswordView.vue'
+import ResetPasswordView from '../views/ResetPasswordView.vue'
+import ForgotPasswordView from '../views/ForgotPasswordView.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
@@ -32,6 +34,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/signup',
     name: 'signup',
     component: SignUpView,
+    
+  },
+  {
+    path: '/resetpassword/:token',
+    name: 'resetpassword',
+    component: ResetPasswordView,
+    
+  },
+  {
+    path: '/forgotpassword',
+    name: 'forgotpassword',
+    component: ForgotPasswordView,
     
   },
   {

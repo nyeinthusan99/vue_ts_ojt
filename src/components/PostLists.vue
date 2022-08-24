@@ -39,9 +39,6 @@
           <i class="fas fa-download"></i> &nbsp; Download
         </button>
       </a>
-      <!-- <button class="btn btn-dark" v-else :disabled="showUser.type == 1">
-        <i class="fas fa-download"></i> &nbsp; Download
-      </button> -->
       <span class="ms-5">{{ count }} of {{ total }}</span>
       <table class="table table-bordered table-striped table-responsive mt-4">
         <thead>
@@ -60,7 +57,7 @@
             <td class="text-center">
               <router-link
                 :to="`/updatepost/${post.id}`"
-                class="btn btn-dark me-3"
+                class="btn btn-dark me-2"
               >
                 <i class="fas fa-pen"></i>
               </router-link>
@@ -210,6 +207,8 @@ export default defineComponent({
 }
 .pre-line{
   white-space: pre-line;
+  word-break: break-all;
+ 
 }
 </style>
 

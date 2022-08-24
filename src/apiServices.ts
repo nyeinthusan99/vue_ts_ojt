@@ -24,7 +24,7 @@ class apiServices{
     }
 
     async postList(page:any,formData:any):Promise<any>{
-        return await axios.get(`posts?page=${page}&title=${formData.title}&description=${formData.description}`)
+        return await axios.get(`posts?page=${page}&title=${formData.title}&description=${formData.description}&type=${formData.type}`)
     }
 
     userList(page:any,data:any,sort_direction:any,sort_field:any):Promise<any>{
@@ -88,6 +88,14 @@ class apiServices{
         return axios.get(`posts/export?page=${page}&title=${formData.title}&description=${formData.description}&type=${formData.type}`,{
             responseType:"blob"
         })
+    }
+
+    forgotPassword(data:any):Promise<any>{
+        return axios.post(`password/forgotPassword`,data)
+    }
+
+    resetPassword(data:any):Promise<any>{
+        return axios.post(`password/reset`,data)
     }
 }
 

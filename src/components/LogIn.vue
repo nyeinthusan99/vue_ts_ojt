@@ -25,6 +25,9 @@
             {{ errors.password[0] }}
           </p>
         </div>
+        <router-link :to="{ name: 'forgotpassword' }">
+            Forgot Password?
+          </router-link>
         <div class="mb-3 mt-3">
           <button
             type="submit"

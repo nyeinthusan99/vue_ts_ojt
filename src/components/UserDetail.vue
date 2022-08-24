@@ -81,7 +81,6 @@ export default defineComponent({
   mounted() {
     apiServices.userDetail(this.$route.params.id).then((response) => {
       this.userDetail = response.data.data;
-      console.log(this.userDetail)
     });
   },
 });
