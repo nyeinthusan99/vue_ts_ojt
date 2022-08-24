@@ -144,6 +144,7 @@ export default defineComponent({
       deleteId: "",
       total: "",
       count: "",
+      page:1,
       searchForm: {
         title: "",
         description: "",
@@ -159,6 +160,7 @@ export default defineComponent({
   },
   methods: {
     async postListsView(page = 1) {
+      this.page = page;
       await apiServices
         .postList(page, this.searchForm)
         .then((response) => {
@@ -172,8 +174,8 @@ export default defineComponent({
         });
     },
 
-    download(page = 1){
-      apiServices.downloadPost(page, this.searchForm)
+    download(){
+      apiServices.downloadPost(this.page, this.searchForm)
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const tag = document.createElement("a");

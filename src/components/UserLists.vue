@@ -54,13 +54,25 @@
         </button>
       </a>
 
-      <table class="table table-bordered table-striped table-responsive mt-4">
+      <table class="table table-bordered table-striped table-responsive mt-4" id="sort">
         <thead>
           <tr>
             <th scope="col">Profile</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Type</th>
+            <th scope="col">
+              <a href="#" @click.prevent="change_sort('name')">Name</a>
+              <span v-if="sort_direction == 'desc' && sort_field == 'name'">&uarr;</span>
+              <span v-if="sort_direction == 'asc' && sort_field == 'name'">&darr;</span>
+              </th>
+            <th scope="col">
+              <a href="#" @click.prevent="change_sort('email')">Email</a>
+              <span v-if="sort_direction == 'desc' && sort_field == 'email'">&uarr;</span>
+              <span v-if="sort_direction == 'asc' && sort_field == 'email'">&darr;</span>
+              </th>
+            <th scope="col">
+              <a href="#" @click.prevent="change_sort('type')">Type</a>
+              <span v-if="sort_direction == 'desc' && sort_field == 'type'">&uarr;</span>
+              <span v-if="sort_direction == 'asc' && sort_field == 'type'">&darr;</span>
+            </th>
             <th scope="col">Phone</th>
             <th scope="col">Address</th>
             <th scope="col">Date Of Birth</th>
@@ -150,7 +162,8 @@
           <p class="mt-3">No Data Found</p>
         </td>
       </table>
-      <Pagination :data="userLists" @pagination-change-page="userListsView" />
+      <Pagination  :data="userLists" @pagination-change-page="userListsView" />
+      
     </div>
   </div>
 </template>
@@ -172,9 +185,13 @@ export default defineComponent({
         email: "",
         type: "",
       },
+      page:1,
       userLists: Object,
       data: Array,
       deleteId: "",
+      sort_direction:"desc",
+      sort_field:"name"
+
     };
   },
   computed: {
@@ -187,13 +204,23 @@ export default defineComponent({
   methods: {
     //show user list & search
     userListsView(page = 1) {
-      apiServices.userList(page, this.search).then((response) => {
+      this.page = page;
+
+      apiServices.userList(page, this.search,this.sort_direction,this.sort_field).then((response) => {
         this.userLists = response.data;
-        this.data = response.data.data;
+         this.data = response.data.data;      
       });
     },
-    download(page = 1){
-      apiServices.downloadUser(page, this.search)
+    change_sort(field:any){
+      if(this.sort_field == field){
+       this.sort_direction = this.sort_direction == "asc" ? "desc" : "asc";
+      }else{
+         this.sort_field = field;
+      }
+      this.userListsView();
+    },
+    download(){
+      apiServices.downloadUser(this.page,this.search)
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const tag = document.createElement("a");
@@ -205,6 +232,7 @@ export default defineComponent({
       .catch((errors) => {
         console.log(errors);
       })
+      
     },
     ...mapActions(["getUser"]),
 
@@ -226,6 +254,7 @@ export default defineComponent({
     },
   },
 });
+
 </script>
 
 <style scoped>
@@ -240,4 +269,8 @@ export default defineComponent({
 img {
   width: 100px;
 }
+a{
+  text-decoration: none;
+}
 </style>
+
