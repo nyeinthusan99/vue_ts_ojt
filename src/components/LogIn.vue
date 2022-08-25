@@ -62,7 +62,6 @@ export default defineComponent({
   name: "LogIn",
   data() {
     return {
-      isLogin:false,
       authfail: "",
       loginData: {
         email: "",
@@ -82,7 +81,9 @@ export default defineComponent({
           let token = response.data.token;
           localStorage.setItem("token", token);
           this.$router.push({ name: "posts" });
-          window.location.replace("posts");
+          window.setTimeout(function () {
+              window.location.replace("posts");
+          },1000);
         })
         .catch((error) => {
           if (error.response.status == 401) {

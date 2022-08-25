@@ -24,7 +24,7 @@ class apiServices{
     }
 
     async postList(page:any,formData:any):Promise<any>{
-        return await axios.get(`posts?page=${page}&title=${formData.title}&description=${formData.description}&type=${formData.type}`)
+        return await axios.get(`posts?page=${page}&title=${formData.title}&description=${formData.description}&type=${formData.type}&id=${formData.id}`)
     }
 
     userList(page:any,data:any,sort_direction:any,sort_field:any):Promise<any>{
@@ -33,7 +33,7 @@ class apiServices{
 
     deletePost(id:any):Promise<any>{
         return  axios.delete(`posts/${id}`)
-        
+
     }
 
     postUpload(formData:any,id:any):Promise<any>{
@@ -85,7 +85,7 @@ class apiServices{
     }
 
     downloadPost(page:any,formData:any):Promise<any>{
-        return axios.get(`posts/export?page=${page}&title=${formData.title}&description=${formData.description}&type=${formData.type}`,{
+        return axios.get(`posts/export?page=${page}&title=${formData.title}&description=${formData.description}&type=${formData.type}&id=${formData.id}`,{
             responseType:"blob"
         })
     }

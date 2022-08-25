@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="text-center">
           <img
-            :src="'http://localhost:8000/' + showUser.image"
+            :src="showUser.image ?'http://localhost:8000/' + showUser.image : img"
             alt="profile image"
             class="mb-5 w-25 h-25"
           />
@@ -67,6 +67,11 @@
 import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 export default defineComponent({
+  data(){
+    return{
+       img: require("../assets/default.png"),
+    }
+  },
   computed: mapGetters(["showUser"]),
 });
 </script>

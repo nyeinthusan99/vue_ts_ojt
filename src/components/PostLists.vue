@@ -39,7 +39,8 @@
           <i class="fas fa-download"></i> &nbsp; Download
         </button>
       </a>
-      <span class="ms-5">{{ count }} of {{ total }}</span>
+      <span class="ms-5" v-if="count">Showing {{ count }} of {{ total }} entries</span>
+      <span class="ms-5" v-else>Showing 0 of {{ total }} entries</span>
       <table class="table table-bordered table-striped table-responsive mt-4">
         <thead>
           <tr>
@@ -145,16 +146,20 @@ export default defineComponent({
       searchForm: {
         title: "",
         description: "",
-        type:localStorage.getItem("type")
+        type:localStorage.getItem("type"),
+        id:localStorage.getItem("id")
       },
     };
   },
   mounted() {
     this.postListsView();
+
   },
   computed: {
     ...mapGetters(["showUser"]),
+    
   },
+
   methods: {
     async postListsView(page = 1) {
       this.page = page;
@@ -165,6 +170,8 @@ export default defineComponent({
           this.data = response.data.data;
           this.total = response.data.total;
           this.count = response.data.to;
+          //this.$router.go(0)
+
         })
         .catch((error) => {
           this.error = error.response.data.Result;

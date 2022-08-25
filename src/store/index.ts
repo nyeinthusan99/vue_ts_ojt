@@ -21,8 +21,10 @@ export default createStore({
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
       })
       let user = response.data.user;
+      let id = response.data.user.id
       let type = response.data.user.type
       localStorage.setItem("type", type)
+      localStorage.setItem("id", id)
       commit('setUser', user)
     }
   },
