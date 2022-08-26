@@ -70,7 +70,6 @@ export default defineComponent({
   },
   mounted() {
      apiServices.getUser().then((response) => {
-     
     });
   },
   methods: {

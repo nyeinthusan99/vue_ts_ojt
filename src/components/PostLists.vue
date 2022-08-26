@@ -1,10 +1,10 @@
 <template>
-  <div class="row">
+  <div class="row" >
     <div class="col-md-10 mx-auto">
       <h3 class="mt-4">Post Lists</h3>
     </div>
   </div>
-  <div class="row">
+  <div class="row" v-if="loading==true">
     <div class="col-md-10 mx-auto">
       <div class="d-inline">
         <form class="form-inline d-inline me-4" @submit.prevent="postListsView">
@@ -50,6 +50,7 @@
             <th scope="col">Action</th>
           </tr>
         </thead>
+        
         <tbody v-if="data && data.length > 0">
           <tr v-for="(post, index) in data" :key="index">
             <th scope="row">{{ index + 1 }}</th>
@@ -122,6 +123,11 @@
       <Pagination :data="postLists" @pagination-change-page="postListsView" />
     </div>
   </div>
+      <div v-else class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -136,6 +142,7 @@ export default defineComponent({
   },
   data() {
     return {
+      loading:false,
       postLists: Object,
       data: Array,
       error: "",
@@ -170,8 +177,7 @@ export default defineComponent({
           this.data = response.data.data;
           this.total = response.data.total;
           this.count = response.data.to;
-          //this.$router.go(0)
-
+          this.loading = true;
         })
         .catch((error) => {
           this.error = error.response.data.Result;

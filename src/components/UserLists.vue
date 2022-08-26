@@ -190,7 +190,7 @@ export default defineComponent({
       data: Array,
       deleteId: "",
       sort_direction:"desc",
-      sort_field:"name"
+      sort_field:"id"
 
     };
   },

@@ -150,6 +150,18 @@ router.beforeEach((to, from, next) => {
 })
 
 router.beforeEach((to, from, next) => {
+  if (to.name === 'login' ) {
+    let token:any= localStorage.getItem('token');
+    if (!token) {next()}
+    else {next({ name: 'posts' })}
+  }
+  else {
+    next();
+ }
+
+})
+
+router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     let token:any= localStorage.getItem('token');
     if (!token) {
@@ -175,8 +187,5 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-
-
-
-
 export default router
+

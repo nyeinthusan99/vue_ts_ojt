@@ -28,12 +28,11 @@ class apiServices{
     }
 
     userList(page:any,data:any,sort_direction:any,sort_field:any):Promise<any>{
-        return  axios.get(`userLists?page=${page}&name=${data.name}&email=${data.email}&type=${data.type}&sort_direction=${sort_direction}&sort_filed=${sort_field}`)
+        return  axios.get(`userLists?page=${page}&name=${data.name}&email=${data.email}&type=${data.type}&sort_direction=${sort_direction}&sort_field=${sort_field}`)
     }
 
     deletePost(id:any):Promise<any>{
         return  axios.delete(`posts/${id}`)
-
     }
 
     postUpload(formData:any,id:any):Promise<any>{
